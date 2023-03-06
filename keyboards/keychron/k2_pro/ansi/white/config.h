@@ -16,6 +16,12 @@
 
 #pragma once
 
+#define AUTO_SHIFT_TIMEOUT 160
+#define AUTO_SHIFT_NO_SETUP
+#define LED_MATRIX_DEFAULT_MODE LED_MATRIX_SOLID_REACTIVE_SIMPLE
+
+#define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
+
 #ifdef LED_MATRIX_ENABLE
 /* LED matrix driver configuration */
 #    define DRIVER_COUNT 1
