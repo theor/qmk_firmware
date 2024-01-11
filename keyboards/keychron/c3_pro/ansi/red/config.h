@@ -26,3 +26,8 @@
     { 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50 }
 
 #define LED_DISABLE_WHEN_USB_SUSPENDED
+
+// #define LED_MATRIX_DEFAULT_MODE LED_MATRIX_NONE 
+#define LED_MATRIX_DEFAULT_MODE LED_MATRIX_SOLID_REACTIVE_SIMPLE 
+
+// #define LED_MATRIX_DEFAULT_ON true // Sets the default enabled state, if none has been set
