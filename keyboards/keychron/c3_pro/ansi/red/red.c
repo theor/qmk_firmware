@@ -58,9 +58,9 @@ const snled27351_led_t PROGMEM g_snled27351_leds[SNLED27351_LED_COUNT] = {
     {0, E_16},
     {0, C_15},
 
-    {0, D_1},
+    {0, D_1}, // 33
     {0, D_2},
-    {0, D_3},
+    {0, D_3}, // 35 W
     {0, D_4},
     {0, D_5},
     {0, D_6},
@@ -76,7 +76,7 @@ const snled27351_led_t PROGMEM g_snled27351_leds[SNLED27351_LED_COUNT] = {
     {0, D_16},
     {0, C_16},
 
-    {0, C_1},
+    {0, C_1}, // 50
     {0, C_2},
     {0, C_3},
     {0, C_4},
