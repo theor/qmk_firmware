@@ -61,15 +61,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
 bool led_matrix_indicators_user(void) {
+    led_matrix_set_value_all(0);
      uint8_t layer = get_highest_layer(layer_state|default_layer_state);
      led_matrix_set_value(1+layer, 255);
      if(layer == DEV_FN) {
         //   led_matrix_set_value(0, get_autoshift_state() ? 255 : 0); // show autoshift on escape
           // arrows
           led_matrix_set_value(35, 255);
+          led_matrix_set_value(37, 255);
           led_matrix_set_value(51, 255);
           led_matrix_set_value(52, 255);
           led_matrix_set_value(53, 255);
+          led_matrix_set_value(54, 255);
 
           // 789  iop
         //   led_matrix_set_value(39, 255);

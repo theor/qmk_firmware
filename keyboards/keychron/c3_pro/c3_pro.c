@@ -105,7 +105,9 @@ bool led_matrix_indicators_kb(void) {
     }
 
     if (os_switch_indicate_count) {
-        led_matrix_set_value_all(os_switch_indicate_count % 2 ? 0 : UINT8_MAX);
+        uint8_t layer = get_highest_layer(layer_state|default_layer_state);
+        led_matrix_set_value(1+layer, os_switch_indicate_count % 2 ? 0 : UINT8_MAX);
+        // led_matrix_set_value_all(os_switch_indicate_count % 2 ? 0 : UINT8_MAX);
     }
 
     return true;
