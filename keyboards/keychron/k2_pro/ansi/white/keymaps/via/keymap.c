@@ -23,7 +23,19 @@ enum layers{
   DEV,
   DEV_FN
 };
+
+#define IDLE_TIMEOUT_MS 2500
+static uint16_t idle_timer = 0;
+static bool led_on = true;
+
+layer_state_t layer_state_set_user(layer_state_t state){
+    idle_timer = timer_read();
+    led_on = true;
+    return state;
+}
 layer_state_t default_layer_state_set_user(layer_state_t state){
+    idle_timer = timer_read();
+    led_on = true;
 	uint8_t layer = biton32(state);
     if(layer == GAMING){
           autoshift_disable();
@@ -32,11 +44,21 @@ layer_state_t default_layer_state_set_user(layer_state_t state){
      }
     return state;
 }
+
 bool led_matrix_indicators_user(void) {
      uint8_t layer = get_highest_layer(layer_state|default_layer_state);
-     led_matrix_set_value(1+layer, 255);
+
+    if(timer_elapsed(idle_timer) < IDLE_TIMEOUT_MS || layer == DEV_FN)
+    {
+        if(led_on)
+        {
+            led_matrix_set_value(1+layer, 255);
+            led_matrix_set_value(0, get_autoshift_state() ? 255 : 0); // show autoshift on escape
+        }
+    } else {
+        led_on = false;
+    }
      if(layer == DEV_FN) {
-          led_matrix_set_value(0, get_autoshift_state() ? 255 : 0); // show autoshift on escape
           // arrows
           led_matrix_set_value(33, 255);
           led_matrix_set_value(47, 255);
@@ -111,14 +133,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_TAB,         KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,  KC_RBRC,  KC_BSLS,            KC_PGDN,
      TD(ALT_LP),     KC_A,     KC_S,     KC_D,     KC_F,     KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,            KC_ENT,             KC_HOME,
      KC_LSFT,        KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,                      KC_RSFT,  KC_UP,    KC_END,
-     KC_LCTL,        KC_LGUI,  KC_LALT,                      LT(3, KC_SPC),                               TT(3),    KC_RALT,  SC_RCPC,  KC_LEFT,  KC_DOWN,  KC_RGHT),
+     KC_LCTL,        KC_LGUI,  KC_LALT,                      LT(3, KC_SPC),                                    TT(3),    KC_RALT,  SC_RCPC,  KC_LEFT,  KC_DOWN,  KC_RGHT),
 
 [DEV_FN] = LAYOUT_ansi_84(
-     KC_ASTG ,       KC_BRID,  KC_BRIU,  KC_TASK,  KC_FILE,  BL_DEC,   BL_INC,   KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,  KC_VOLU,  KC_INS,  BL_STEP,  TT(3),
+     KC_ASTG ,      KC_BRID,  KC_BRIU,  KC_TASK,  KC_FILE,  BL_DEC,   BL_INC,   KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,  KC_VOLU,  KC_INS,  BL_STEP,  TT(3),
      _______,       BT_HST1,  BT_HST2,  BT_HST3,  BL_INC,   BL_DEC,   _______,  _______,  _______,  _______,  _______,  _______,  _______,  KC_DEL,            _______,
      BL_TOGG,       KC_HOME,  KC_UP,    KC_END,   KC_PGUP,  _______,  _______,  _______,  KC_7,     KC_8,     KC_9,     _______,  _______,  _______,           _______,
      KC_CAPS_LOCK,  KC_LEFT,  KC_DOWN,  KC_RGHT,  KC_PGDN,  _______,  _______,  _______,  KC_4,     KC_5,     KC_6,     _______,            _______,           _______,
-     AS_TOGG,       _______,  _______,  _______,  _______,  BAT_LVL,  NK_TOGG,  _______,  KC_1,     KC_2,     KC_3,                         _______,  AS_UP,   _______,
+     _______,       KC_DEL,   KC_BSPC,  KC_ENT,   _______,  BAT_LVL,  NK_TOGG,  _______,  KC_1,     KC_2,     KC_3,                         _______,  AS_UP,   AS_TOGG,
      _______,       _______,  _______,                                _______,                                KC_0,     _______,  AS_DOWN,  AS_RPT,  _______,  _______)
 };
 
